@@ -1,0 +1,52 @@
+[
+    {
+        "title": "LiteSpeed Cache – WordPress プラグイン | WordPress.org 日本語",
+        "url": "https:\/\/ja.wordpress.org\/plugins\/litespeed-cache\/",
+        "snippet": "LiteSpeed Cache for WordPress（LSCWP）は、オールインワンのサイトアクセラレーションプラグインで、専用のサーバーレベルのキャッシュと最適化機能のコレクションを備え ..."
+    },
+    {
+        "title": "LiteSpeed Cacheの使い方（WordPress高速化） | ラッコサーバー",
+        "url": "https:\/\/rakkoserver.com\/knowledge\/975\/",
+        "snippet": "LiteSpeed Cacheとは、高速Webサーバーソフトウェア「LiteSpeed」を採用しているサーバーでのみ利用できるキャッシュ機能（WordPressプラグイン）です。"
+    },
+    {
+        "title": "LiteSpeed Cacheを使用してWordPressサイトを高速化する方法 ...",
+        "url": "https:\/\/help.mixhost.jp\/hc\/ja\/articles\/4408206471833-LiteSpeed-Cache%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%A6WordPress%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92%E9%AB%98%E9%80%9F%E5%8C%96%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95",
+        "snippet": "LiteSpeed Cacheプラグインの導入 · STEP1：WordPressの管理画面にログインし、左側のプラグインにカーソルを合わせ、その横に表示される新規追加をクリック · STEP2：右上の ..."
+    },
+    {
+        "title": "WordPressを高速化！LiteSpeed Cacheのインストールから設定まで ...",
+        "url": "https:\/\/www.value-domain.com\/media\/litespeed-cache\/",
+        "snippet": "2024\/12\/13 ... ページの最適化を設定する. LiteSpeed Cacheには、ページを軽くする目的でHTMLやCSS、JavaScriptを圧縮する機能が用意されています。 けれども、これらの ..."
+    },
+    {
+        "title": "WordPressでLiteSpeed Cacheを導入して高速化する方法 ...",
+        "url": "https:\/\/help.colorfulbox.jp\/article\/wp-litespeed\/",
+        "snippet": "LiteSpeed Cacheについて. LiteSpeed Cacheは、WordPress（ワードプレス）用のキャッシュプラグインで、LiteSpeed Webサーバーで利用できます。"
+    },
+    {
+        "title": "WordPress用プラグイン「LiteSpeed Cache」で重大な脆弱性が発生 ...",
+        "url": "https:\/\/rocket-boys.co.jp\/security-measures-lab\/ulnerability-litespeed-cache-plugin-wordpress\/",
+        "snippet": "2024\/08\/16 ... 2024年5月2日にWordPress（ワードプレス）用プラグイン「LiteSpeed Cache」で複数の脆弱性が発生しています。バージョン5.7.0.1未満が対象で早急に ..."
+    },
+    {
+        "title": "LiteSpeed Cache - ロリポップ！レンタルサーバー",
+        "url": "https:\/\/lolipop.jp\/service\/specs\/litespeed-cache\/",
+        "snippet": "「LiteSpeed Cache」はLiteSpeedのWebサーバーで利用できるキャッシュ機能で、WordPressプラグインを有効化することでサイトを高速化できます。"
+    },
+    {
+        "title": "LiteSpeed Cacheの不具合の少ない設定方法と使い方【SWELL ...",
+        "url": "https:\/\/wp-search.org\/ja\/blog\/wordpress-start-litespeedcache\/",
+        "snippet": "2024\/02\/05 ... この記事を最後まで読めば、WordPress（ワードプレス）を高速化できます。 ぜひ最後まで進めてみてください。 目次. キャッシュプラグイン「LiteSpeed Cache ..."
+    },
+    {
+        "title": "【重要】WordPressプラグイン「LiteSpeed Cache(5.7.0.1未満 ...",
+        "url": "https:\/\/www.xserver.ne.jp\/news_detail.php?view_id=12658",
+        "snippet": "2024\/05\/13 ... ・クロスサイトスクリプティングへの悪用により、WordPressファイルやデータベースに悪意のあるJavaScriptコードを挿入したり、管理者ユーザーが作成され ..."
+    },
+    {
+        "title": "LiteSpeed Cacheの利用方法 - ロリポップ！レンタルサーバー",
+        "url": "https:\/\/lolipop.jp\/manual\/hp\/litespeed-cache\/",
+        "snippet": "アクセラレータ」から、WordPressをインストールしたドメインをOFFにします。 アクセラレータの設定画面。example.comがOFF設定になっている。 ロリポップ！FTPで ..."
+    }
+]

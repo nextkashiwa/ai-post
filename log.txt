@@ -1,0 +1,302 @@
+[2025-08-06 12:14:15] 予約投稿 ID 33
+[2025-08-06 14:09:39] 予約投稿 ID 34
+[2025-08-06 14:11:12] 予約投稿 ID 35 / topic=WordPress セキュリティ プラグイン
+[2025-08-06 14:12:05] 予約投稿 ID 36 / topic=WordPress セキュリティ プラグイン
+[2025-08-06 14:12:48] 予約投稿 ID 42 / topic=WordPress セキュリティ プラグイン
+[2025-08-06 14:15:54] 予約投稿 ID 43 / topic=WordPress セキュリティ プラグイン
+[2025-08-06 14:20:28] 投稿失敗: json_decode(): Argument #1 ($json) must be of type string, GuzzleHttp\Psr7\Stream given
+[2025-08-06 14:24:50] 投稿失敗: json_decode(): Argument #1 ($json) must be of type string, GuzzleHttp\Psr7\Stream given
+[2025-08-06 14:25:57] 投稿失敗: json_decode(): Argument #1 ($json) must be of type string, GuzzleHttp\Psr7\Stream given
+[2025-08-06 14:27:16] 投稿失敗: json_decode(): Argument #1 ($json) must be of type string, GuzzleHttp\Psr7\Stream given
+[2025-08-06 14:28:57] 予約投稿 ID 47 / topic=WordPress セキュリティ プラグイン / plugin=iThemes Security Pro
+[2025-08-06 14:29:20] 予約投稿 ID 48 / topic=WordPress セキュリティ プラグイン / plugin=BulletProof Security
+[2025-08-07 02:30:13] 予約投稿 ID 49 / topic=WordPress セキュリティ プラグイン / plugin=Jetpack セキュリティ
+[2025-08-08 02:30:12] 予約投稿 ID 55 / topic=WordPress セキュリティ プラグイン / plugin=Limit Login Attempts
+[2025-08-09 02:30:14] 予約投稿 ID 57 / topic=WordPress セキュリティ プラグイン / plugin=Defender Security
+[2025-08-10 02:30:15] 予約投稿 ID 59 / topic=WordPress セキュリティ プラグイン / plugin=Wordfence Free
+[2025-08-11 02:30:13] 予約投稿 ID 61 / topic=WordPress セキュリティ プラグイン / plugin=All-in-One WP Security
+[2025-08-12 02:30:19] 予約投稿 ID 63 / topic=WordPress セキュリティ プラグイン / plugin=WP Security Firewall
+[2025-08-13 02:30:13] 予約投稿 ID 65 / topic=WordPress セキュリティ プラグイン / plugin=Clef
+[2025-08-14 02:30:07] 投稿失敗: Server error: `POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBxlF-gRTCafzQqwAbWJ2vuOh_rIMgJmmo` resulted in a `503 Service Unavailable` response:
+{
+  "error": {
+    "code": 503,
+    "message": "The model is overloaded. Please try again later.",
+    "status": "UNAVAI (truncated...)
+
+[2025-08-15 02:30:06] 投稿失敗: Server error: `POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBxlF-gRTCafzQqwAbWJ2vuOh_rIMgJmmo` resulted in a `503 Service Unavailable` response:
+{
+  "error": {
+    "code": 503,
+    "message": "The model is overloaded. Please try again later.",
+    "status": "UNAVAI (truncated...)
+
+[2025-08-16 02:30:14] 予約投稿 ID 69 / topic=WordPress セキュリティ プラグイン / plugin=Wordfence Premium
+[2025-08-17 02:30:15] 予約投稿 ID 70 / topic=WordPress セキュリティ プラグイン / plugin=Securiti
+[2025-08-18 02:30:15] 予約投稿 ID 72 / topic=WordPress セキュリティ プラグイン / plugin=Really Simple SSL
+[2025-08-18 15:51:35] 投稿失敗: Client error: `POST https://api.wordpress.org/plugins/info/1.2/` resulted in a `405 Method not allowed` response:
+This API only serves GET requests.
+
+[2025-08-18 15:56:17] WPORG unserialize failed
+[2025-08-18 15:56:18] WPORG unserialize failed
+[2025-08-18 15:56:19] WPORG unserialize failed
+[2025-08-18 15:56:21] WPORG unserialize failed
+[2025-08-18 15:56:23] WPORG unserialize failed
+[2025-08-18 15:56:25] WPORG unserialize failed
+[2025-08-18 15:56:26] WPORG unserialize failed
+[2025-08-18 15:56:27] WPORG unserialize failed
+[2025-08-18 15:56:28] WPORG unserialize failed
+[2025-08-18 15:56:30] WPORG unserialize failed
+[2025-08-18 15:56:31] WPORG unserialize failed
+[2025-08-18 15:56:31] WPORG unserialize failed
+[2025-08-18 15:56:33] WPORG unserialize failed
+[2025-08-18 15:56:34] WPORG unserialize failed
+[2025-08-18 15:56:35] WPORG unserialize failed
+[2025-08-18 15:56:36] WPORG unserialize failed
+[2025-08-18 15:56:38] WPORG unserialize failed
+[2025-08-18 15:56:40] WPORG unserialize failed
+[2025-08-18 15:56:40] 候補見つからず: topic=WordPress セキュリティ → 投稿スキップ
+[2025-08-18 15:58:50] WPORG unserialize failed
+[2025-08-18 15:58:51] WPORG unserialize failed
+[2025-08-18 15:58:51] WPORG unserialize failed
+[2025-08-18 15:58:52] WPORG unserialize failed
+[2025-08-18 15:58:53] WPORG unserialize failed
+[2025-08-18 15:58:53] WPORG unserialize failed
+[2025-08-18 15:58:54] WPORG unserialize failed
+[2025-08-18 15:58:55] WPORG unserialize failed
+[2025-08-18 15:58:56] WPORG unserialize failed
+[2025-08-18 15:58:57] WPORG unserialize failed
+[2025-08-18 15:58:57] WPORG unserialize failed
+[2025-08-18 15:58:58] WPORG unserialize failed
+[2025-08-18 15:59:00] WPORG unserialize failed
+[2025-08-18 15:59:01] WPORG unserialize failed
+[2025-08-18 15:59:02] WPORG unserialize failed
+[2025-08-18 15:59:03] WPORG unserialize failed
+[2025-08-18 15:59:04] WPORG unserialize failed
+[2025-08-18 15:59:05] WPORG unserialize failed
+[2025-08-18 15:59:07] WPORG unserialize failed
+[2025-08-18 15:59:09] WPORG unserialize failed
+[2025-08-18 15:59:11] WPORG unserialize failed
+[2025-08-18 15:59:13] WPORG unserialize failed
+[2025-08-18 15:59:14] WPORG unserialize failed
+[2025-08-18 15:59:16] WPORG unserialize failed
+[2025-08-18 15:59:18] WPORG unserialize failed
+[2025-08-18 15:59:20] WPORG unserialize failed
+[2025-08-18 15:59:22] WPORG unserialize failed
+[2025-08-18 15:59:23] WPORG unserialize failed
+[2025-08-18 15:59:25] WPORG unserialize failed
+[2025-08-18 15:59:26] WPORG unserialize failed
+[2025-08-18 15:59:28] WPORG unserialize failed
+[2025-08-18 15:59:30] WPORG unserialize failed
+[2025-08-18 15:59:32] WPORG unserialize failed
+[2025-08-18 15:59:34] WPORG unserialize failed
+[2025-08-18 15:59:35] WPORG unserialize failed
+[2025-08-18 15:59:37] WPORG unserialize failed
+[2025-08-18 15:59:39] WPORG unserialize failed
+[2025-08-18 15:59:40] WPORG unserialize failed
+[2025-08-18 15:59:42] WPORG unserialize failed
+[2025-08-18 15:59:44] WPORG unserialize failed
+[2025-08-18 15:59:46] WPORG unserialize failed
+[2025-08-18 15:59:48] WPORG unserialize failed
+[2025-08-18 15:59:50] WPORG unserialize failed
+[2025-08-18 15:59:51] WPORG unserialize failed
+[2025-08-18 15:59:53] WPORG unserialize failed
+[2025-08-18 15:59:55] WPORG unserialize failed
+[2025-08-18 15:59:56] WPORG unserialize failed
+[2025-08-18 15:59:58] WPORG unserialize failed
+[2025-08-18 16:00:00] WPORG unserialize failed
+[2025-08-18 16:00:02] WPORG unserialize failed
+[2025-08-18 16:00:03] WPORG unserialize failed
+[2025-08-18 16:00:06] WPORG unserialize failed
+[2025-08-18 16:00:08] WPORG unserialize failed
+[2025-08-18 16:00:10] WPORG unserialize failed
+[2025-08-18 16:00:12] WPORG unserialize failed
+[2025-08-18 16:00:14] WPORG unserialize failed
+[2025-08-18 16:00:17] WPORG unserialize failed
+[2025-08-18 16:00:22] WPORG unserialize failed
+[2025-08-18 16:00:26] WPORG unserialize failed
+[2025-08-18 16:00:30] WPORG unserialize failed
+[2025-08-18 16:00:36] WPORG unserialize failed
+[2025-08-18 16:00:40] WPORG unserialize failed
+[2025-08-18 16:00:44] WPORG unserialize failed
+[2025-08-18 16:00:48] WPORG unserialize failed
+[2025-08-18 16:00:51] WPORG unserialize failed
+[2025-08-18 16:00:54] WPORG unserialize failed
+[2025-08-18 16:00:57] WPORG unserialize failed
+[2025-08-18 16:00:58] WPORG unserialize failed
+[2025-08-18 16:01:00] WPORG unserialize failed
+[2025-08-18 16:01:02] WPORG unserialize failed
+[2025-08-18 16:01:04] WPORG unserialize failed
+[2025-08-18 16:01:06] WPORG unserialize failed
+[2025-08-18 16:01:10] 候補見つからず: topic=WordPress セキュリティ → 投稿スキップ
+[2025-08-19 02:30:07] WPORG unserialize failed
+[2025-08-19 02:30:08] WPORG unserialize failed
+[2025-08-19 02:30:10] WPORG unserialize failed
+[2025-08-19 02:30:11] WPORG unserialize failed
+[2025-08-19 02:30:12] WPORG unserialize failed
+[2025-08-19 02:30:14] WPORG unserialize failed
+[2025-08-19 02:30:16] WPORG unserialize failed
+[2025-08-19 02:30:17] WPORG unserialize failed
+[2025-08-19 02:30:18] WPORG unserialize failed
+[2025-08-19 02:30:20] WPORG unserialize failed
+[2025-08-19 02:30:22] WPORG unserialize failed
+[2025-08-19 02:30:23] WPORG unserialize failed
+[2025-08-19 02:30:25] WPORG unserialize failed
+[2025-08-19 02:30:27] WPORG unserialize failed
+[2025-08-19 02:30:28] WPORG unserialize failed
+[2025-08-19 02:30:30] WPORG unserialize failed
+[2025-08-19 02:30:31] WPORG unserialize failed
+[2025-08-19 02:30:32] WPORG unserialize failed
+[2025-08-19 02:30:35] WPORG unserialize failed
+[2025-08-19 02:30:38] WPORG unserialize failed
+[2025-08-19 02:30:40] WPORG unserialize failed
+[2025-08-19 02:30:43] WPORG unserialize failed
+[2025-08-19 02:30:45] WPORG unserialize failed
+[2025-08-19 02:30:47] WPORG unserialize failed
+[2025-08-19 02:30:50] WPORG unserialize failed
+[2025-08-19 02:30:52] WPORG unserialize failed
+[2025-08-19 02:30:54] WPORG unserialize failed
+[2025-08-19 02:30:57] WPORG unserialize failed
+[2025-08-19 02:30:59] WPORG unserialize failed
+[2025-08-19 02:31:02] WPORG unserialize failed
+[2025-08-19 02:31:04] WPORG unserialize failed
+[2025-08-19 02:31:06] WPORG unserialize failed
+[2025-08-19 02:31:09] WPORG unserialize failed
+[2025-08-19 02:31:12] WPORG unserialize failed
+[2025-08-19 02:31:14] WPORG unserialize failed
+[2025-08-19 02:31:16] WPORG unserialize failed
+[2025-08-19 02:31:19] WPORG unserialize failed
+[2025-08-19 02:31:21] WPORG unserialize failed
+[2025-08-19 02:31:23] WPORG unserialize failed
+[2025-08-19 02:31:26] WPORG unserialize failed
+[2025-08-19 02:31:29] WPORG unserialize failed
+[2025-08-19 02:31:31] WPORG unserialize failed
+[2025-08-19 02:31:34] WPORG unserialize failed
+[2025-08-19 02:31:36] WPORG unserialize failed
+[2025-08-19 02:31:38] WPORG unserialize failed
+[2025-08-19 02:31:40] WPORG unserialize failed
+[2025-08-19 02:31:43] WPORG unserialize failed
+[2025-08-19 02:31:45] WPORG unserialize failed
+[2025-08-19 02:31:48] WPORG unserialize failed
+[2025-08-19 02:31:50] WPORG unserialize failed
+[2025-08-19 02:31:53] WPORG unserialize failed
+[2025-08-19 02:31:55] WPORG unserialize failed
+[2025-08-19 02:31:58] WPORG unserialize failed
+[2025-08-19 02:32:00] WPORG unserialize failed
+[2025-08-19 02:32:02] WPORG unserialize failed
+[2025-08-19 02:32:05] WPORG unserialize failed
+[2025-08-19 02:32:07] WPORG unserialize failed
+[2025-08-19 02:32:09] WPORG unserialize failed
+[2025-08-19 02:32:12] WPORG unserialize failed
+[2025-08-19 02:32:14] WPORG unserialize failed
+[2025-08-19 02:32:16] WPORG unserialize failed
+[2025-08-19 02:32:19] WPORG unserialize failed
+[2025-08-19 02:32:21] WPORG unserialize failed
+[2025-08-19 02:32:23] WPORG unserialize failed
+[2025-08-19 02:32:26] WPORG unserialize failed
+[2025-08-19 02:32:28] WPORG unserialize failed
+[2025-08-19 02:32:31] WPORG unserialize failed
+[2025-08-19 02:32:33] WPORG unserialize failed
+[2025-08-19 02:32:35] WPORG unserialize failed
+[2025-08-19 02:32:38] WPORG unserialize failed
+[2025-08-19 02:32:40] WPORG unserialize failed
+[2025-08-19 02:32:43] WPORG unserialize failed
+[2025-08-19 02:32:49] 候補見つからず: topic=WordPress セキュリティ → 投稿スキップ
+[2025-08-20 02:30:07] WPORG unserialize failed
+[2025-08-20 02:30:08] WPORG unserialize failed
+[2025-08-20 02:30:09] WPORG unserialize failed
+[2025-08-20 02:30:10] WPORG unserialize failed
+[2025-08-20 02:30:11] WPORG unserialize failed
+[2025-08-20 02:30:12] WPORG unserialize failed
+[2025-08-20 02:30:13] WPORG unserialize failed
+[2025-08-20 02:30:14] WPORG unserialize failed
+[2025-08-20 02:30:15] WPORG unserialize failed
+[2025-08-20 02:30:16] WPORG unserialize failed
+[2025-08-20 02:30:17] WPORG unserialize failed
+[2025-08-20 02:30:18] WPORG unserialize failed
+[2025-08-20 02:30:20] WPORG unserialize failed
+[2025-08-20 02:30:21] WPORG unserialize failed
+[2025-08-20 02:30:22] WPORG unserialize failed
+[2025-08-20 02:30:23] WPORG unserialize failed
+[2025-08-20 02:30:24] WPORG unserialize failed
+[2025-08-20 02:30:25] WPORG unserialize failed
+[2025-08-20 02:30:27] WPORG unserialize failed
+[2025-08-20 02:30:29] WPORG unserialize failed
+[2025-08-20 02:30:31] WPORG unserialize failed
+[2025-08-20 02:30:33] WPORG unserialize failed
+[2025-08-20 02:30:34] WPORG unserialize failed
+[2025-08-20 02:30:36] WPORG unserialize failed
+[2025-08-20 02:30:37] WPORG unserialize failed
+[2025-08-20 02:30:39] WPORG unserialize failed
+[2025-08-20 02:30:41] WPORG unserialize failed
+[2025-08-20 02:30:43] WPORG unserialize failed
+[2025-08-20 02:30:44] WPORG unserialize failed
+[2025-08-20 02:30:46] WPORG unserialize failed
+[2025-08-20 02:30:48] WPORG unserialize failed
+[2025-08-20 02:30:49] WPORG unserialize failed
+[2025-08-20 02:30:51] WPORG unserialize failed
+[2025-08-20 02:30:53] WPORG unserialize failed
+[2025-08-20 02:30:55] WPORG unserialize failed
+[2025-08-20 02:30:56] WPORG unserialize failed
+[2025-08-20 02:30:58] WPORG unserialize failed
+[2025-08-20 02:31:00] WPORG unserialize failed
+[2025-08-20 02:31:01] WPORG unserialize failed
+[2025-08-20 02:31:03] WPORG unserialize failed
+[2025-08-20 02:31:05] WPORG unserialize failed
+[2025-08-20 02:31:07] WPORG unserialize failed
+[2025-08-20 02:31:09] WPORG unserialize failed
+[2025-08-20 02:31:10] WPORG unserialize failed
+[2025-08-20 02:31:12] WPORG unserialize failed
+[2025-08-20 02:31:14] WPORG unserialize failed
+[2025-08-20 02:31:15] WPORG unserialize failed
+[2025-08-20 02:31:17] WPORG unserialize failed
+[2025-08-20 02:31:19] WPORG unserialize failed
+[2025-08-20 02:31:21] WPORG unserialize failed
+[2025-08-20 02:31:23] WPORG unserialize failed
+[2025-08-20 02:31:25] WPORG unserialize failed
+[2025-08-20 02:31:27] WPORG unserialize failed
+[2025-08-20 02:31:28] WPORG unserialize failed
+[2025-08-20 02:31:30] WPORG unserialize failed
+[2025-08-20 02:31:32] WPORG unserialize failed
+[2025-08-20 02:31:33] WPORG unserialize failed
+[2025-08-20 02:31:35] WPORG unserialize failed
+[2025-08-20 02:31:37] WPORG unserialize failed
+[2025-08-20 02:31:39] WPORG unserialize failed
+[2025-08-20 02:31:40] WPORG unserialize failed
+[2025-08-20 02:31:42] WPORG unserialize failed
+[2025-08-20 02:31:44] WPORG unserialize failed
+[2025-08-20 02:31:45] WPORG unserialize failed
+[2025-08-20 02:31:47] WPORG unserialize failed
+[2025-08-20 02:31:49] WPORG unserialize failed
+[2025-08-20 02:31:51] WPORG unserialize failed
+[2025-08-20 02:31:52] WPORG unserialize failed
+[2025-08-20 02:31:54] WPORG unserialize failed
+[2025-08-20 02:31:56] WPORG unserialize failed
+[2025-08-20 02:31:58] WPORG unserialize failed
+[2025-08-20 02:31:59] WPORG unserialize failed
+[2025-08-20 02:32:04] 候補見つからず: topic=WordPress セキュリティ → 投稿スキップ
+[2025-08-20 14:22:22] 候補見つからず: topic=WordPress セキュリティ → スキップ
+[2025-08-20 14:30:23] 予約投稿 ID 75 / topic=WordPress セキュリティ / plugin=CloudSecure WP Security (cloudsecure-wp-security) / type=best_practices
+[2025-08-20 14:33:16] 予約投稿 ID 76 / topic=WordPress セキュリティ / plugin=Pz-LinkCard (pz-linkcard) / type=best_practices
+[2025-08-20 14:51:56] 予約投稿 ID 77 / topic=WordPress セキュリティ / plugin=Formzu WP (formzu-wp) / type=best_practices
+[2025-08-20 15:00:05] 予約投稿 ID 79 / topic=WordPress セキュリティ / plugin=診断ジェネレータ作成プラグイン (os-diagnosis-generator) / type=best_practices
+[2025-08-20 15:12:00] 予約投稿 ID 80 / topic=WordPress セキュリティ / plugin=MW WP Form (mw-wp-form) / type=best_practices
+[2025-08-20 15:25:30] 予約投稿 ID 86 / topic=WordPress セキュリティ / plugin=CloudSecure WP Security (cloudsecure-wp-security)
+[2025-08-21 02:30:16] 予約投稿 ID 88 / topic=WordPress セキュリティ / plugin=CloudSecure WP Security (cloudsecure-wp-security)
+[2025-08-22 02:30:18] 予約投稿 ID 89 / topic=WordPress セキュリティ / plugin=Pz-LinkCard (pz-linkcard)
+[2025-08-23 02:30:17] 予約投稿 ID 91 / topic=WordPress セキュリティ / plugin=Formzu WP (formzu-wp)
+[2025-08-24 02:30:17] 予約投稿 ID 93 / topic=WordPress セキュリティ / plugin=診断ジェネレータ作成プラグイン (os-diagnosis-generator)
+[2025-08-25 02:30:29] 予約投稿 ID 95 / topic=WordPress セキュリティ / plugin=MW WP Form (mw-wp-form)
+[2025-08-25 15:48:40] 投稿失敗: Client error: `GET https://www.googleapis.com/customsearch/v1?key=AIzaSyDgnoseSGEeqxYVQ_4NIALD7GQNRUfojzg&cx=71cb6168e96e24a8b%26q%3DWordPress%26num%3D10%26hl%3Dja&q=Throws%20SPAM%20Away%20WordPress&num=10&hl=ja&gl=jp&lr=lang_ja&fields=items%28title%2Clink%2Csnippet%29` resulted in a `400 Bad Request` response:
+{
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "errors": [
+      {
+         (truncated...)
+
+[2025-08-25 15:50:29] 予約投稿 ID 97 / topic=WordPress セキュリティ / plugin=Throws SPAM Away (throws-spam-away)
+[2025-08-25 15:54:13] 予約投稿 ID 99 / topic=WordPress セキュリティ / plugin=Online Lesson Booking (online-lesson-booking-system)
+[2025-08-26 02:30:40] 予約投稿 ID 100 / topic=WordPress セキュリティ / plugin=Yoast SEO &#8211; Advanced SEO with real-time guidance and built-in AI (wordpress-seo)
+[2025-08-27 02:30:40] 予約投稿 ID 104 / topic=WordPress セキュリティ / plugin=WooCommerce (woocommerce)
