@@ -1,0 +1,12 @@
+.env
+# secrets
+.env
+
+# repo ルート直下の個別ファイル
+/auto_post_gemini copy.php
+/auto_post_gemini勉強.php
+/log.txt
+/test.json
+
+# ディレクトリ
+/logs/
