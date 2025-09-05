@@ -11,7 +11,7 @@
  *
  * 必要な .env
  *   WP_BASE_URL, WP_API_USER, WP_API_PASS
- *   GEMINI_API_KEY
+ *   OPENAI_API_KEY
  *   GOOGLE_CSE_KEY, GOOGLE_CSE_CX
  *   （任意）TRENDS_* / MIN_INSTALLS / MAX_DAYS / REQUIRE_TESTED / MIN_RATING / WPORG_MAX_PAGES / PUBLISH_HOUR_JST
  *
@@ -63,15 +63,17 @@ function wporgClient(): Client {
     ]);
     return $client;
 }
-function geminiClient(): Client {
-    static $client = null;
-    if ($client) return $client;
-    $client = new Client([
-        'base_uri' => 'https://generativelanguage.googleapis.com',
+function openaiClient(): Client {
+    return new Client([
+        'base_uri' => 'https://api.openai.com/',
         'timeout'  => 60,
+        'headers'  => [
+            'Authorization' => 'Bearer ' . $_ENV['OPENAI_API_KEY'],
+            'Content-Type'  => 'application/json'
+        ]
     ]);
-    return $client;
 }
+
 
 /*===============================================================
  * 1) ログ & デバッグユーティリティ
@@ -781,16 +783,55 @@ PROMPT;
 }
 
 /*===============================================================
- * 10) Gemini 生成
+ * 10) openai 生成（強化版：system指示 + max_tokens + リトライ）
  *===============================================================*/
-function generateContent(string $prompt): string {
-    $res = geminiClient()->post('/v1beta/models/gemini-1.5-flash:generateContent', [
-        'query' => ['key' => $_ENV['GEMINI_API_KEY']],
-        'json'  => ['contents' => [[ 'role'=>'user', 'parts'=>[['text'=>$prompt]] ]]],
-    ]);
-    $body = json_decode((string)$res->getBody(), true);
-    return $body['candidates'][0]['content']['parts'][0]['text'] ?? '(生成失敗)';
+function generateContentOpenAI(string $prompt): string {
+    $maxTries = 4;
+    $delayMs  = 300; // 指数バックオフ開始
+
+    for ($i = 1; $i <= $maxTries; $i++) {
+        try {
+            $response = openaiClient()->post('v1/chat/completions', [
+                'json' => [
+                    // 利用可能なら gpt-4o 推奨。3.5でも動きますが品質差あり
+                    'model' => 'gpt-4o',
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' =>
+                                '必ず Gutenberg ブロックコメント付きHTMLのみで出力する。' .
+                                'Markdownは禁止。先頭に [PLUGIN_NAME] / [PLUGIN_SLUG] / [OFFICIAL_URL] の3行をそのまま出力する。' .
+                                '最初の h2 はプラグイン名、本文に公式URLを1回以上含める。'
+                        ],
+                        ['role' => 'user', 'content' => $prompt],
+                    ],
+                    'temperature' => 0.7,
+                    'max_tokens'  => 6000, // 長文安定のため余裕を確保
+                ]
+            ]);
+            $data = json_decode((string)$response->getBody(), true);
+            $text = $data['choices'][0]['message']['content'] ?? '';
+            if ($text !== '') return $text;
+
+            throw new RuntimeException('OpenAI応答を解釈できませんでした');
+        } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+            $code = $e->getResponse()?->getStatusCode() ?? 0;
+            if ($code === 429 || $code >= 500) { // 混雑・一時障害はリトライ
+                usleep($delayMs * 1000);
+                $delayMs *= 2;
+                continue;
+            }
+            throw $e;
+        } catch (\Throwable $e) {
+            if ($i === $maxTries) throw $e;
+            usleep($delayMs * 1000);
+            $delayMs *= 2;
+        }
+    }
+    throw new RuntimeException('OpenAI生成に失敗しました（リトライ上限）');
 }
+
+
 
 /*===============================================================
  * 11) 出力検証（ブロック必須）
@@ -885,7 +926,7 @@ try {
     saveJsonDebug('brief', $brief);
 
     // 8) タイトル10本 → 採択
-    $titlesRaw = generateContent(buildTitlePrompt($brief));
+    $titlesRaw = generateContentOpenAI(buildTitlePrompt($brief));
     $titleLines = array_values(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $titlesRaw))));
     $titleCandidates = [];
     foreach ($titleLines as $line) {
@@ -899,7 +940,7 @@ try {
     $attempt = 0; $content = '';
     while ($attempt < 3) {
         $attempt++;
-        $content = generateContent(
+        $content = generateContentOpenAI(
             buildBodyPrompt($brief, $verification, $chosenTitle, $pluginName, $pluginSlug, $officialUrl, $searchSources)
         );
         try {
