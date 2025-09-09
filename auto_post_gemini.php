@@ -1,4 +1,5 @@
 <?php
+
 /**
  * auto_post_gemini_v4_2.php
  *
@@ -30,10 +31,15 @@ use GuzzleHttp\Exception\GuzzleException;
 
 Dotenv::createImmutable(__DIR__)->load();
 
+if (empty($_ENV['OPENAI_API_KEY'])) {
+    throw new RuntimeException('OPENAI_API_KEY が読み込めていません。.env に設定されているか、パスが正しいか確認してください');
+}
+
 /*===============================================================
  * 0) クライアント
  *===============================================================*/
-function googleCseClient(): Client {
+function googleCseClient(): Client
+{
     static $client = null;
     if ($client) return $client;
     $client = new Client([
@@ -42,7 +48,8 @@ function googleCseClient(): Client {
     ]);
     return $client;
 }
-function wpClient(): Client {
+function wpClient(): Client
+{
     static $client = null;
     if ($client) return $client;
     $auth = base64_encode($_ENV['WP_API_USER'] . ':' . $_ENV['WP_API_PASS']);
@@ -53,7 +60,8 @@ function wpClient(): Client {
     ]);
     return $client;
 }
-function wporgClient(): Client {
+function wporgClient(): Client
+{
     static $client = null;
     if ($client) return $client;
     $client = new Client([
@@ -63,7 +71,8 @@ function wporgClient(): Client {
     ]);
     return $client;
 }
-function openaiClient(): Client {
+function openaiClient(): Client
+{
     return new Client([
         'base_uri' => 'https://api.openai.com/',
         'timeout'  => 60,
@@ -78,17 +87,20 @@ function openaiClient(): Client {
 /*===============================================================
  * 1) ログ & デバッグユーティリティ
  *===============================================================*/
-function logInfo(string $msg): void {
+function logInfo(string $msg): void
+{
     file_put_contents(__DIR__ . '/log.txt', date('[Y-m-d H:i:s] ') . $msg . "\n", FILE_APPEND);
 }
 /** APIキーを隠したURLを作ってログに出す用 */
-function buildQueryUrlForLog(array $q): string {
+function buildQueryUrlForLog(array $q): string
+{
     $q2 = $q;
     if (isset($q2['key'])) $q2['key'] = '***REDACTED***';
     return 'https://www.googleapis.com/customsearch/v1?' . http_build_query($q2);
 }
 /** 検索結果を行単位でログ出力 */
-function logSearchResults(string $query, string $lang, array $items, string $urlForLog): void {
+function logSearchResults(string $query, string $lang, array $items, string $urlForLog): void
+{
     logInfo("CSE SEARCH lang={$lang} q=\"{$query}\" url={$urlForLog}");
     logInfo("CSE RESULTS lang={$lang} count=" . count($items));
     $n = 0;
@@ -100,18 +112,20 @@ function logSearchResults(string $query, string $lang, array $items, string $url
     }
 }
 /** JSONをファイル保存（監査用） */
-function saveJsonDebug(string $prefix, array $data): void {
+function saveJsonDebug(string $prefix, array $data): void
+{
     $dir = __DIR__ . '/logs';
     if (!is_dir($dir)) @mkdir($dir, 0775, true);
     $file = $dir . '/' . date('Ymd_His') . "_{$prefix}.json";
-    file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+    file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     logInfo("DEBUG JSON saved: {$file}");
 }
 
 /*===============================================================
  * 2) Google トレンド（任意）
  *===============================================================*/
-function getTrendingTopics(string $keyword = 'wordpress プラグイン'): array {
+function getTrendingTopics(string $keyword = 'wordpress プラグイン'): array
+{
     $base = rtrim($_ENV['TRENDS_BASE'] ?? 'https://trends.google.com', '/');
     $hl   = $_ENV['TRENDS_HL']   ?? 'ja';
     $tz   = (int)($_ENV['TRENDS_TZ'] ?? 540);
@@ -127,15 +141,18 @@ function getTrendingTopics(string $keyword = 'wordpress プラグイン'): array
     ]);
 
     $payload = [
-        'comparisonItem' => [[ 'keyword' => $keyword, 'geo' => $geo, 'time' => $time ]],
-        'category' => 0, 'property' => '',
+        'comparisonItem' => [['keyword' => $keyword, 'geo' => $geo, 'time' => $time]],
+        'category' => 0,
+        'property' => '',
     ];
 
     try {
         $explore = $client->get('/trends/api/explore', [
-            'query' => ['hl'=>$hl,'tz'=>$tz,'req'=> json_encode($payload, JSON_UNESCAPED_UNICODE)],
+            'query' => ['hl' => $hl, 'tz' => $tz, 'req' => json_encode($payload, JSON_UNESCAPED_UNICODE)],
         ]);
-    } catch (GuzzleException $e) { return []; }
+    } catch (GuzzleException $e) {
+        return [];
+    }
 
     $json = preg_replace('/^\)\]\}\'/', '', (string)$explore->getBody());
     $data = json_decode($json, true);
@@ -143,15 +160,20 @@ function getTrendingTopics(string $keyword = 'wordpress プラグイン'): array
 
     $widget = null;
     foreach ($data['widgets'] as $w) {
-        if (($w['id'] ?? '') === 'RELATED_QUERIES' || ($w['title'] ?? '') === 'Related queries') { $widget = $w; break; }
+        if (($w['id'] ?? '') === 'RELATED_QUERIES' || ($w['title'] ?? '') === 'Related queries') {
+            $widget = $w;
+            break;
+        }
     }
     if (!$widget) return [];
 
     try {
         $rq = $client->get('/trends/api/widgetdata/relatedsearches', [
-            'query' => ['hl'=>$hl,'tz'=>$tz,'token'=>$widget['token'],'req'=> json_encode($widget['request'], JSON_UNESCAPED_UNICODE)],
+            'query' => ['hl' => $hl, 'tz' => $tz, 'token' => $widget['token'], 'req' => json_encode($widget['request'], JSON_UNESCAPED_UNICODE)],
         ]);
-    } catch (GuzzleException $e) { return []; }
+    } catch (GuzzleException $e) {
+        return [];
+    }
 
     $json2 = preg_replace('/^\)\]\}\'/', '', (string)$rq->getBody());
     $rqData = json_decode($json2, true);
@@ -162,12 +184,13 @@ function getTrendingTopics(string $keyword = 'wordpress プラグイン'): array
         foreach ($list['rankedKeyword'] ?? [] as $kw) {
             $q = $kw['query'] ?? ($kw['topic']['title'] ?? null);
             if (!$q) continue;
-            $topics[] = ['query'=>$q, 'value'=>(int)($kw['value'] ?? 0), 'type'=>(string)$type];
+            $topics[] = ['query' => $q, 'value' => (int)($kw['value'] ?? 0), 'type' => (string)$type];
         }
     }
     return $topics;
 }
-function pickTodayTopic(array $topics, string $fallback = 'WordPress セキュリティ'): string {
+function pickTodayTopic(array $topics, string $fallback = 'WordPress セキュリティ'): string
+{
     if (!$topics) return $fallback;
     usort($topics, function ($a, $b) {
         if ($a['type'] !== $b['type']) return $a['type'] === 'RISING' ? -1 : 1;
@@ -179,9 +202,12 @@ function pickTodayTopic(array $topics, string $fallback = 'WordPress セキュ�
 /*===============================================================
  * 3) 既出プラグイン（重複防止）
  *===============================================================*/
-function fetchUsedPluginIdentifiers(int $days = 60): array {
+function fetchUsedPluginIdentifiers(int $days = 60): array
+{
     $afterUTC = (new DateTime("-{$days} days", new DateTimeZone('UTC')))->format('Y-m-d\TH:i:s');
-    $page = 1; $names = []; $slugs = [];
+    $page = 1;
+    $names = [];
+    $slugs = [];
     do {
         $res = wpClient()->get('wp-json/wp/v2/posts', [
             'query' => [
@@ -205,22 +231,24 @@ function fetchUsedPluginIdentifiers(int $days = 60): array {
         }
         $page++;
     } while (is_array($posts) && count($posts) === 100);
-    return ['names'=>array_values(array_unique($names)),'slugs'=>array_values(array_unique($slugs))];
+    return ['names' => array_values(array_unique($names)), 'slugs' => array_values(array_unique($slugs))];
 }
 
 /*===============================================================
  * 4) WP.org API（JSON/serialize 自動判別 + リトライ）
  *===============================================================*/
-function parseWporg(string $body) {
+function parseWporg(string $body)
+{
     $json = json_decode($body, true);
     if (json_last_error() === JSON_ERROR_NONE && is_array($json)) return $json;
     $arr = @unserialize($body, ['allowed_classes' => false]);
     if (is_array($arr) || is_object($arr)) return (array)$arr;
     throw new RuntimeException('WPORG response parse failed');
 }
-function wporgGetWithRetry(Client $client, string $path, array $query, int $maxTries = 4): string {
+function wporgGetWithRetry(Client $client, string $path, array $query, int $maxTries = 4): string
+{
     $delay = 300; // ms
-    for ($i=1; $i<=$maxTries; $i++) {
+    for ($i = 1; $i <= $maxTries; $i++) {
         try {
             $res = $client->get($path, [
                 'query'   => $query,
@@ -230,16 +258,22 @@ function wporgGetWithRetry(Client $client, string $path, array $query, int $maxT
             $body = (string)$res->getBody();
             if ($code >= 200 && $code < 300) return $body;
 
-            if ($code === 429 || $code >= 500) { usleep($delay*1000); $delay*=2; continue; }
+            if ($code === 429 || $code >= 500) {
+                usleep($delay * 1000);
+                $delay *= 2;
+                continue;
+            }
             throw new RuntimeException("WPORG HTTP {$code}");
         } catch (\Throwable $e) {
             if ($i === $maxTries) throw $e;
-            usleep($delay*1000); $delay*=2;
+            usleep($delay * 1000);
+            $delay *= 2;
         }
     }
     throw new RuntimeException('WPORG request failed (exhausted)');
 }
-function searchPluginsOnDotOrg(string $query, int $page = 1, int $perPage = 20): array {
+function searchPluginsOnDotOrg(string $query, int $page = 1, int $perPage = 20): array
+{
     $params = [
         'action'  => 'query_plugins',
         'request' => [
@@ -260,7 +294,8 @@ function searchPluginsOnDotOrg(string $query, int $page = 1, int $perPage = 20):
     $plugins = $decoded['plugins'] ?? [];
     return array_map(fn($p) => is_object($p) ? (array)$p : $p, $plugins);
 }
-function searchPluginsOnDotOrgWithBrowse(string $browse, int $page = 1, int $perPage = 20): array {
+function searchPluginsOnDotOrgWithBrowse(string $browse, int $page = 1, int $perPage = 20): array
+{
     $params = [
         'action'  => 'query_plugins',
         'request' => [
@@ -282,7 +317,8 @@ function searchPluginsOnDotOrgWithBrowse(string $browse, int $page = 1, int $per
     return array_map(fn($p) => is_object($p) ? (array)$p : $p, $plugins);
 }
 /** 詳細情報（ratings/sections/tags/support_* を含む） */
-function getPluginInfoBySlug(string $slug): ?array {
+function getPluginInfoBySlug(string $slug): ?array
+{
     $params = [
         'action'  => 'plugin_information',
         'request' => [
@@ -303,7 +339,7 @@ function getPluginInfoBySlug(string $slug): ?array {
                 'requires'                => true,
                 'homepage'                => true,
                 'support_threads'         => true,
-                'support_threads_resolved'=> true,
+                'support_threads_resolved' => true,
             ],
         ],
     ];
@@ -318,7 +354,8 @@ function getPluginInfoBySlug(string $slug): ?array {
 /*===============================================================
  * 5) 事実抽出（readme 由来の機能メモ／将来拡張用）
  *===============================================================*/
-function enrichPluginFacts(array $info, string $officialUrl): array {
+function enrichPluginFacts(array $info, string $officialUrl): array
+{
     $sections = $info['sections'] ?? [];
     $tags     = array_map('strval', array_keys($info['tags'] ?? []));
     $blob     = mb_strtolower(
@@ -352,7 +389,8 @@ function enrichPluginFacts(array $info, string $officialUrl): array {
 /*===============================================================
  * 6) ユーザー評価の要約（必要なら使用）
  *===============================================================*/
-function summarizeUserFeedback(array $info): array {
+function summarizeUserFeedback(array $info): array
+{
     $ratings = $info['ratings'] ?? []; // [1=>x,2=>y,3=>z,4=>a,5=>b]
     $total   = is_array($ratings) ? array_sum($ratings) : 0;
 
@@ -423,7 +461,9 @@ function isPluginViable(
         try {
             $last = new DateTime($lastUpdated);
             if ($last < (new DateTime("-{$maxDays} days"))) return false;
-        } catch (\Throwable $e) { return false; }
+        } catch (\Throwable $e) {
+            return false;
+        }
     } else return false;
 
     if ($requireTested) {
@@ -438,14 +478,40 @@ function isPluginViable(
 
     return true;
 }
-function findCandidatePlugin(string $topic, array $usedNames, array $usedSlugs, string $currentWpMajor = '6.6'): ?array {
+function findCandidatePlugin(string $topic, array $usedNames, array $usedSlugs, string $currentWpMajor = '6.6'): ?array
+{
     $topicBase = trim(preg_replace('/プラグイン/u', '', $topic));
     $queries = array_values(array_unique(array_filter([
-        $topic, $topicBase,
-        'WordPress セキュリティ','WordPress 画像 最適化','WordPress バックアップ','WordPress キャッシュ',
-        'フォーム','画像圧縮','SEO','security','backup','cache','caching','image optimization',
-        'compression','forms','antispam','firewall','performance','seo','redirect','gallery','analytics',
-        'migration','multilingual','woocommerce','WordPress 引越し','WordPress 保守','WordPress メンテナンス','WordPress ハッキング',
+        $topic,
+        $topicBase,
+        'WordPress セキュリティ',
+        'WordPress 画像 最適化',
+        'WordPress バックアップ',
+        'WordPress キャッシュ',
+        'フォーム',
+        '画像圧縮',
+        'SEO',
+        'security',
+        'backup',
+        'cache',
+        'caching',
+        'image optimization',
+        'compression',
+        'forms',
+        'antispam',
+        'firewall',
+        'performance',
+        'seo',
+        'redirect',
+        'gallery',
+        'analytics',
+        'migration',
+        'multilingual',
+        'woocommerce',
+        'WordPress 引越し',
+        'WordPress 保守',
+        'WordPress メンテナンス',
+        'WordPress ハッキング',
     ])));
 
     $maxQueryPages = (int)($_ENV['WPORG_MAX_PAGES'] ?? 3);
@@ -455,18 +521,18 @@ function findCandidatePlugin(string $topic, array $usedNames, array $usedSlugs, 
             $plugins = searchPluginsOnDotOrg($q, $page);
             if (!$plugins) continue;
 
-            $plugins = array_filter($plugins, function($p) use ($usedNames, $usedSlugs) {
+            $plugins = array_filter($plugins, function ($p) use ($usedNames, $usedSlugs) {
                 $n = mb_strtolower($p['name'] ?? '');
                 $s = mb_strtolower($p['slug'] ?? '');
                 return !in_array($n, $usedNames, true) && !in_array($s, $usedSlugs, true);
             });
 
-            $plugins = array_filter($plugins, function($p) use ($currentWpMajor) {
+            $plugins = array_filter($plugins, function ($p) use ($currentWpMajor) {
                 return isPluginViable($p, $currentWpMajor, null, null, null, null);
             });
             if (!$plugins) continue;
 
-            usort($plugins, function($a, $b) {
+            usort($plugins, function ($a, $b) {
                 $ai = ((int)($b['active_installs'] ?? 0)) <=> ((int)($a['active_installs'] ?? 0));
                 if ($ai !== 0) return $ai;
                 $ldA = !empty($a['last_updated']) ? strtotime($a['last_updated']) : 0;
@@ -501,18 +567,18 @@ function findCandidatePlugin(string $topic, array $usedNames, array $usedSlugs, 
         $popular = searchPluginsOnDotOrgWithBrowse('popular', $page, 30);
         if (!$popular) continue;
 
-        $popular = array_filter($popular, function($p) use ($usedNames, $usedSlugs) {
+        $popular = array_filter($popular, function ($p) use ($usedNames, $usedSlugs) {
             $n = mb_strtolower($p['name'] ?? '');
             $s = mb_strtolower($p['slug'] ?? '');
             return !in_array($n, $usedNames, true) && !in_array($s, $usedSlugs, true);
         });
 
-        $popular = array_filter($popular, function($p) use ($currentWpMajor) {
+        $popular = array_filter($popular, function ($p) use ($currentWpMajor) {
             return isPluginViable($p, $currentWpMajor, null, null, null, null);
         });
         if (!$popular) continue;
 
-        usort($popular, function($a, $b) {
+        usort($popular, function ($a, $b) {
             return ((int)($b['active_installs'] ?? 0)) <=> ((int)($a['active_installs'] ?? 0));
         });
 
@@ -544,13 +610,14 @@ function findCandidatePlugin(string $topic, array $usedNames, array $usedSlugs, 
  * 8) CSE（日・英）検索
  *===============================================================*/
 /** lang: 'ja' | 'en' */
-function googleSearchTop10(string $query, string $lang = 'ja'): array {
+function googleSearchTop10(string $query, string $lang = 'ja'): array
+{
     $hl = $lang === 'ja' ? 'ja' : 'en';
     $gl = $lang === 'ja' ? 'jp' : 'us';
     $lr = $lang === 'ja' ? 'lang_ja' : 'lang_en';
 
     $delay = 200; // ms
-    for ($i=0; $i<3; $i++) {
+    for ($i = 0; $i < 3; $i++) {
         try {
             $q = [
                 'key'    => $_ENV['GOOGLE_CSE_KEY'],
@@ -574,13 +641,17 @@ function googleSearchTop10(string $query, string $lang = 'ja'): array {
             ], $itemsRaw);
 
             logSearchResults($query, $lang, $items, $urlForLog);
-            saveJsonDebug("cse_{$lang}_" . preg_replace('/\W+/u','_',$query), $items);
+            saveJsonDebug("cse_{$lang}_" . preg_replace('/\W+/u', '_', $query), $items);
 
             return $items;
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
             $code = $e->getResponse()?->getStatusCode() ?? 0;
             logInfo("CSE ERROR lang={$lang} q=\"{$query}\" code={$code} msg=" . $e->getMessage());
-            if ($code === 429 || $code >= 500) { usleep($delay*1000); $delay *= 2; continue; }
+            if ($code === 429 || $code >= 500) {
+                usleep($delay * 1000);
+                $delay *= 2;
+                continue;
+            }
             throw $e;
         }
     }
@@ -588,7 +659,8 @@ function googleSearchTop10(string $query, string $lang = 'ja'): array {
     return [];
 }
 /** JA/EN で検索し、URL重複を除いて統合 */
-function collectSearchSources(string $topic): array {
+function collectSearchSources(string $topic): array
+{
     $ja = googleSearchTop10($topic, 'ja');
     $en = googleSearchTop10($topic, 'en');
 
@@ -615,7 +687,7 @@ function collectSearchSources(string $topic): array {
         $i++;
         logInfo(sprintf("  M#%02d %s | %s", $i, $r['title'], $r['url']));
     }
-    saveJsonDebug("cse_merged_" . preg_replace('/\W+/u','_',$topic), $out);
+    saveJsonDebug("cse_merged_" . preg_replace('/\W+/u', '_', $topic), $out);
 
     return $out;
 }
@@ -623,7 +695,8 @@ function collectSearchSources(string $topic): array {
 /*===============================================================
  * 9) ブリーフ / プロンプト（Gutenberg）
  *===============================================================*/
-function buildMasterPrompt(): string {
+function buildMasterPrompt(): string
+{
     return <<<PROMPT
 あなたはWordPress運用ブログの編集者です。対象読者は「WordPress初〜中級のウェブ担当者」。
 以下のルールを厳守してください。
@@ -660,22 +733,24 @@ function buildMasterPrompt(): string {
 
 PROMPT;
 }
-function pickArticleTypeByDay(): string {
-    $map = [0=>'comparison',1=>'troubleshooting',2=>'howto',3=>'best_practices',4=>'roundup',5=>'security',6=>'performance'];
+function pickArticleTypeByDay(): string
+{
+    $map = [0 => 'comparison', 1 => 'troubleshooting', 2 => 'howto', 3 => 'best_practices', 4 => 'roundup', 5 => 'security', 6 => 'performance'];
     $w = (int)date('w'); // 0:日
     return $map[$w] ?? 'howto';
 }
-function buildBrief(array $plugin, string $articleType): array {
+function buildBrief(array $plugin, string $articleType): array
+{
     $sectionsMap = [
-        'comparison'      => ["導入背景","選定基準","他プラグインとの違い","向き不向き","まとめ"],
-        'troubleshooting' => ["症状","想定原因","確認方法","恒久対策","再発防止"],
-        'howto'           => ["できること","前提条件","最短手順","つまずきポイント","応用"],
-        'best_practices'  => ["初期設定","セキュリティ/スパム対策","運用ルール","点検チェック"],
-        'roundup'         => ["選定基準","主な特徴","ケース別おすすめ","まとめ"],
-        'security'        => ["脅威の整理","保護設定","ログ監視","定期点検"],
-        'performance'     => ["ボトルネック","キャッシュ/画像最適化","計測と見直し"],
+        'comparison'      => ["導入背景", "選定基準", "他プラグインとの違い", "向き不向き", "まとめ"],
+        'troubleshooting' => ["症状", "想定原因", "確認方法", "恒久対策", "再発防止"],
+        'howto'           => ["できること", "前提条件", "最短手順", "つまずきポイント", "応用"],
+        'best_practices'  => ["初期設定", "セキュリティ/スパム対策", "運用ルール", "点検チェック"],
+        'roundup'         => ["選定基準", "主な特徴", "ケース別おすすめ", "まとめ"],
+        'security'        => ["脅威の整理", "保護設定", "ログ監視", "定期点検"],
+        'performance'     => ["ボトルネック", "キャッシュ/画像最適化", "計測と見直し"],
     ];
-    $sections = $sectionsMap[$articleType] ?? ["導入背景","最短手順","注意点","代替案"];
+    $sections = $sectionsMap[$articleType] ?? ["導入背景", "最短手順", "注意点", "代替案"];
 
     return [
         "article_type" => $articleType,
@@ -701,7 +776,8 @@ function buildBrief(array $plugin, string $articleType): array {
         "length"       => "1200-1600",
     ];
 }
-function buildGutenbergPreamble(string $pluginName, string $pluginSlug, string $officialUrl): string {
+function buildGutenbergPreamble(string $pluginName, string $pluginSlug, string $officialUrl): string
+{
     return <<<P
 必ず記事冒頭に下記3行を**そのまま**出力すること（検証用）。
 [PLUGIN_NAME]: {$pluginName}
@@ -725,7 +801,8 @@ function buildGutenbergPreamble(string $pluginName, string $pluginSlug, string $
 <!-- /wp:list -->
 P;
 }
-function buildTitlePrompt(array $brief): string {
+function buildTitlePrompt(array $brief): string
+{
     $briefJson = json_encode($brief, JSON_UNESCAPED_UNICODE);
     return <<<PROMPT
 次のブリーフを要約し、検索ユーザーの悩みと利点が一目で伝わる日本語タイトルを10本、30〜38文字で出力。
@@ -751,7 +828,7 @@ function buildBodyPrompt(
     $briefJson  = json_encode($brief, JSON_UNESCAPED_UNICODE);
     $verJson    = json_encode($verification, JSON_UNESCAPED_UNICODE);
     $preamble   = buildGutenbergPreamble($pluginName, $pluginSlug, $officialUrl);
-    $sourcesJson= json_encode($searchSources, JSON_UNESCAPED_UNICODE);
+    $sourcesJson = json_encode($searchSources, JSON_UNESCAPED_UNICODE);
 
     return <<<PROMPT
 {$master}
@@ -783,73 +860,111 @@ PROMPT;
 }
 
 /*===============================================================
- * 10) openai 生成（強化版：system指示 + max_tokens + リトライ）
+ * 10) openai 生成（HTTPコードの可視化＋フォールバック＋リトライ）
  *===============================================================*/
-function generateContentOpenAI(string $prompt): string {
+function generateContentOpenAI(string $prompt): string
+{
+    $models   = ['gpt-4o', 'gpt-4o-mini', 'gpt-3.5-turbo']; // 使えるものから順に試行
     $maxTries = 4;
-    $delayMs  = 300; // 指数バックオフ開始
+    $delayMs  = 300;
 
-    for ($i = 1; $i <= $maxTries; $i++) {
-        try {
-            $response = openaiClient()->post('v1/chat/completions', [
-                'json' => [
-                    // 利用可能なら gpt-4o 推奨。3.5でも動きますが品質差あり
-                    'model' => 'gpt-4o',
-                    'messages' => [
-                        [
-                            'role' => 'system',
-                            'content' =>
+    foreach ($models as $model) {
+        for ($i = 1; $i <= $maxTries; $i++) {
+            try {
+                $response = openaiClient()->post('v1/chat/completions', [
+                    'http_errors' => false, // 例外にせず自前判定
+                    'json' => [
+                        'model' => $model,
+                        'messages' => [
+                            [
+                                'role' => 'system',
+                                'content' =>
                                 '必ず Gutenberg ブロックコメント付きHTMLのみで出力する。' .
-                                'Markdownは禁止。先頭に [PLUGIN_NAME] / [PLUGIN_SLUG] / [OFFICIAL_URL] の3行をそのまま出力する。' .
-                                '最初の h2 はプラグイン名、本文に公式URLを1回以上含める。'
+                                    'Markdownは禁止。先頭に [PLUGIN_NAME] / [PLUGIN_SLUG] / [OFFICIAL_URL] の3行をそのまま出力する。' .
+                                    '最初の h2 はプラグイン名、本文に公式URLを1回以上含める。'
+                            ],
+                            ['role' => 'user', 'content' => $prompt],
                         ],
-                        ['role' => 'user', 'content' => $prompt],
+                        'temperature' => 0.7,
+                        'max_tokens'  => 6000,
                     ],
-                    'temperature' => 0.7,
-                    'max_tokens'  => 6000, // 長文安定のため余裕を確保
-                ]
-            ]);
-            $data = json_decode((string)$response->getBody(), true);
-            $text = $data['choices'][0]['message']['content'] ?? '';
-            if ($text !== '') return $text;
+                    // タイムアウトも長文用に余裕を
+                    'timeout' => 90,
+                ]);
 
-            throw new RuntimeException('OpenAI応答を解釈できませんでした');
-        } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            $code = $e->getResponse()?->getStatusCode() ?? 0;
-            if ($code === 429 || $code >= 500) { // 混雑・一時障害はリトライ
-                usleep($delayMs * 1000);
-                $delayMs *= 2;
-                continue;
+                $code = $response->getStatusCode();
+                $body = (string)$response->getBody();
+
+                // 失敗系：HTTPコードとメッセージをログ
+                if ($code < 200 || $code >= 300) {
+                    // JSONならエラーメッセージ抽出
+                    $snippet = $body;
+                    $decoded = json_decode($body, true);
+                    if (is_array($decoded) && isset($decoded['error'])) {
+                        $msg = $decoded['error']['message'] ?? '';
+                        $type = $decoded['error']['type'] ?? '';
+                        $snippet = trim($msg . ' (' . $type . ')');
+                    }
+                    logInfo("OpenAI HTTP {$code} [model={$model} try={$i}]: " . mb_substr($snippet, 0, 500));
+
+                    // レート/サーバー側はリトライ
+                    if ($code === 429 || $code >= 500) {
+                        usleep($delayMs * 1000);
+                        $delayMs *= 2;
+                        continue;
+                    }
+
+                    // モデル未存在/権限なし（404/400/403）→ 次のモデルへ
+                    if (in_array($code, [400, 403, 404, 405], true)) {
+                        break; // 次の $model へ
+                    }
+
+                    // その他クライアントエラーは即エラー
+                    throw new RuntimeException("OpenAI API HTTP {$code}");
+                }
+
+                // 成功：本文取り出し
+                $data = json_decode($body, true);
+                $text = $data['choices'][0]['message']['content'] ?? '';
+                if ($text !== '') return $text;
+
+                logInfo("OpenAI parse error [model={$model}]: " . mb_substr($body, 0, 300));
+                throw new RuntimeException('OpenAI応答を解釈できませんでした');
+            } catch (\Throwable $e) {
+                // 最終リトライで失敗なら外へ、途中ならバックオフ
+                if ($i === $maxTries) {
+                    logInfo("OpenAI exception [model={$model} try={$i}]: " . $e->getMessage());
+                } else {
+                    usleep($delayMs * 1000);
+                    $delayMs *= 2;
+                    continue;
+                }
             }
-            throw $e;
-        } catch (\Throwable $e) {
-            if ($i === $maxTries) throw $e;
-            usleep($delayMs * 1000);
-            $delayMs *= 2;
         }
+        // このモデルはダメだったので次のモデルへ
     }
-    throw new RuntimeException('OpenAI生成に失敗しました（リトライ上限）');
+    throw new RuntimeException('OpenAI生成に失敗しました（全モデル/リトライ上限）');
 }
-
 
 
 /*===============================================================
  * 11) 出力検証（ブロック必須）
  *===============================================================*/
-function validateGeneratedContent(string $content, string $pluginName, string $pluginSlug, string $officialUrl): void {
-    if (!preg_match('/^\[PLUGIN_NAME\]:\s*'.preg_quote($pluginName,'/').'\s*$/mi', $content)) {
+function validateGeneratedContent(string $content, string $pluginName, string $pluginSlug, string $officialUrl): void
+{
+    if (!preg_match('/^\[PLUGIN_NAME\]:\s*' . preg_quote($pluginName, '/') . '\s*$/mi', $content)) {
         throw new RuntimeException('[PLUGIN_NAME] 不一致/欠落');
     }
-    if (!preg_match('/^\[PLUGIN_SLUG\]:\s*'.preg_quote($pluginSlug,'/').'\s*$/mi', $content)) {
+    if (!preg_match('/^\[PLUGIN_SLUG\]:\s*' . preg_quote($pluginSlug, '/') . '\s*$/mi', $content)) {
         throw new RuntimeException('[PLUGIN_SLUG] 不一致/欠落');
     }
-    if (!preg_match('/^\[OFFICIAL_URL\]:\s*'.preg_quote($officialUrl,'/').'\s*$/mi', $content)) {
+    if (!preg_match('/^\[OFFICIAL_URL\]:\s*' . preg_quote($officialUrl, '/') . '\s*$/mi', $content)) {
         throw new RuntimeException('[OFFICIAL_URL] 不一致/欠落');
     }
     if (!preg_match('/<!--\s*wp:/i', $content)) {
         throw new RuntimeException('Gutenbergブロックが検出できません（Markdown/プレーンHTMLの可能性）');
     }
-    if (!preg_match('/<!--\s*wp:heading[^>]*-->\s*<h2[^>]*>\s*'.preg_quote($pluginName,'/').'\s*<\/h2>\s*<!--\s*\/wp:heading\s*-->/i', $content)) {
+    if (!preg_match('/<!--\s*wp:heading[^>]*-->\s*<h2[^>]*>\s*' . preg_quote($pluginName, '/') . '\s*<\/h2>\s*<!--\s*\/wp:heading\s*-->/i', $content)) {
         throw new RuntimeException('h2（プラグイン名）の heading ブロックがありません');
     }
     if (stripos($content, $officialUrl) === false) {
@@ -857,7 +972,8 @@ function validateGeneratedContent(string $content, string $pluginName, string $p
     }
 }
 /** evidence/SOURCE_URLの最低要件チェック（簡易） */
-function validateEvidence(string $content): void {
+function validateEvidence(string $content): void
+{
     if (strpos($content, '{{SOURCE_URL}}') === false) {
         throw new RuntimeException('出典(SOURCE_URL)が本文に含まれていません');
     }
@@ -866,7 +982,8 @@ function validateEvidence(string $content): void {
 /*===============================================================
  * 12) 投稿
  *===============================================================*/
-function postToWordPress(string $title, string $content, DateTime $publishGMT): array {
+function postToWordPress(string $title, string $content, DateTime $publishGMT): array
+{
     $res = wpClient()->post('wp-json/wp/v2/posts', [
         'headers' => ['Content-Type' => 'application/json'],
         'json'    => [
@@ -922,7 +1039,7 @@ try {
     // 7) ブリーフ＆verification
     $candidate['facts'] = $facts;
     $brief        = buildBrief($candidate, $articleType);
-    $verification = [ $pluginSlug => ["verified"=>true, "source_url"=>"{{SOURCE_URL}}"] ];
+    $verification = [$pluginSlug => ["verified" => true, "source_url" => "{{SOURCE_URL}}"]];
     saveJsonDebug('brief', $brief);
 
     // 8) タイトル10本 → 採択
@@ -937,7 +1054,8 @@ try {
     logInfo("TITLE chosen: {$chosenTitle}");
 
     // 9) 本文生成（最大3回検証）
-    $attempt = 0; $content = '';
+    $attempt = 0;
+    $content = '';
     while ($attempt < 3) {
         $attempt++;
         $content = generateContentOpenAI(
